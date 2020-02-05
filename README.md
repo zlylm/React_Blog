@@ -15,3 +15,4 @@
 1. 实现文章详情页面
 2. 使用React-Markdown解析
 3. 使用markdown-navbar实现文章小结导航
+4. 安装egg ， 并大致学习了一下路由的使用
