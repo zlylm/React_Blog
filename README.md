@@ -16,3 +16,8 @@
 2. 使用React-Markdown解析
 3. 使用markdown-navbar实现文章小结导航
 4. 安装egg ， 并大致学习了一下路由的使用
+
+## 2020-2-6
+1. 安装phpStudy
+2. 安装egg-mysql并调试连通本地Mysql数据库
+3. 建立文章表和文章类型表
