@@ -5,15 +5,11 @@ import Header from '../components/Header'
 import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
-
+import {test} from '../api/index'
 import '../public/less/pages/index.less'
 
-const Home = () => {
-  const [articleList,setArticleList] = useState([
-    {title:'create-react-app项目暴露webpack配置文件',context:'create-react-app创建的react项目，webapck配置，默认情况下是在node_modules里面的，我们需要把它暴露到根目录上来。 执行 npm run eject 命令即可，一般情况下，是会报错的。 解决方法，依次执行下面几个命令就可以了。'},
-    {title:'create-react-app项目暴露webpack配置文件',context:'create-react-app创建的react项目，webapck配置，默认情况下是在node_modules里面的，我们需要把它暴露到根目录上来。 执行 npm run eject 命令即可，一般情况下，是会报错的。 解决方法，依次执行下面几个命令就可以了。'},
-    {title:'create-react-app项目暴露webpack配置文件',context:'create-react-app创建的react项目，webapck配置，默认情况下是在node_modules里面的，我们需要把它暴露到根目录上来。 执行 npm run eject 命令即可，一般情况下，是会报错的。 解决方法，依次执行下面几个命令就可以了。'}
-  ])
+const Home = (props) => {
+  const [articleList,setArticleList] = useState(props.data)
   return (
     <div>
       <Head>
@@ -50,6 +46,15 @@ const Home = () => {
       <Footer />
     </div>
   )
+}
+
+Home.getInitialProps = async ()=>{
+  let res = await test({},'get')
+  let result = []
+  if (res.status == 200) {
+    result = res.data
+  }
+  return result
 }
 
 export default Home
