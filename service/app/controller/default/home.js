@@ -23,6 +23,26 @@ class HomeController extends Controller {
             data: result
         }
     }
+
+    // 获取文章详情
+    async getArticleById(){
+        const {ctx,app} = this;
+        // 需要先在路由配置动态传值
+        let id = ctx.request.body.id;
+        let sql = 'SELECT article.id as id,' + 
+                  'article.title as title,' +
+                  'article.introduce as introduce,' +
+                  'article.content as content,'+
+                  "FROM_UNIXTIME(article.create_time,'%Y-%m-%d %H:%i:%s' ) as createTime,"+
+                  'article.view_count as viewCount,' +
+                  'article_type.type_name as typeName'+
+                  ' FROM blog_article AS article LEFT JOIN blog_article_type AS article_type ON article.type_id = article_type.Id' +
+                  ' WHERE article.id ='+id;
+        let result = await app.mysql.query(sql)
+        ctx.body = {
+            data: result[0]
+        }
+    }
 }
 
 module.exports = HomeController

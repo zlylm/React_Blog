@@ -7,44 +7,12 @@ import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import ReactMarkdown from 'react-markdown'
 import MarkNav from 'markdown-navbar'
+import {getArticleById} from '../api/index'
 
 import '../public/less/pages/detail.less'
 
-const Detail = ()=> {
-    let markdown='# P01:课程介绍和环境搭建\n' +
-  '[ **M** ] arkdown + E [ **ditor** ] = **Mditor**  \n' +
-  '> Mditor 是一个简洁、易于集成、方便扩展、期望舒服的编写 markdown 的编辑器，仅此而已... \n\n' +
-   '**这是加粗的文字**\n\n' +
-  '*这是倾斜的文字*`\n\n' +
-  '***这是斜体加粗的文字***\n\n' +
-  '~~这是加删除线的文字~~ \n\n'+
-  '\`console.log(111)\` \n\n'+
-  '# p02:来个Hello World 初始Vue3.0\n' +
-  '> aaaaaaaaa\n' +
-  '>> bbbbbbbbb\n' +
-  '>>> cccccccccc\n'+
-  '***\n\n\n' +
-  '# p03:Vue3.0基础知识讲解\n' +
-  '> aaaaaaaaa\n' +
-  '>> bbbbbbbbb\n' +
-  '>>> cccccccccc\n\n'+
-  '# p04:Vue3.0基础知识讲解\n' +
-  '> aaaaaaaaa\n' +
-  '>> bbbbbbbbb\n' +
-  '>>> cccccccccc\n\n'+
-  '#5 p05:Vue3.0基础知识讲解\n' +
-  '> aaaaaaaaa\n' +
-  '>> bbbbbbbbb\n' +
-  '>>> cccccccccc\n\n'+
-  '# p06:Vue3.0基础知识讲解\n' +
-  '> aaaaaaaaa\n' +
-  '>> bbbbbbbbb\n' +
-  '>>> cccccccccc\n\n'+
-  '# p07:Vue3.0基础知识讲解\n' +
-  '> aaaaaaaaa\n' +
-  '>> bbbbbbbbb\n' +
-  '>>> cccccccccc\n\n'+
-  '``` var a=11; ```'
+const Detail = (props)=> {
+    const [articleData,setArticleData] = useState(props.data)
     return (
         <div>
             <Header />
@@ -55,15 +23,15 @@ const Detail = ()=> {
                         <Breadcrumb.Item><a href="/">视频列表</a></Breadcrumb.Item>
                         <Breadcrumb.Item>xxx</Breadcrumb.Item>
                     </Breadcrumb>
-                    <div className="article-title">create-react-app项目暴露webpack配置文件</div>
+                    <div className="article-title">{articleData.title}</div>
                     <div className="list-icon">
-                        <span><Icon type="calendar" /> 2019-06-28</span>
-                        <span><Icon type="folder" /> 视频教程</span>
-                        <span><Icon type="fire" /> 5498人</span>
+                        <span><Icon type="calendar" /> {articleData.createTime}</span>
+                        <span><Icon type="folder" /> {articleData.typeName}</span>
+                        <span><Icon type="fire" /> {articleData.viewCount}人</span>
                     </div>
                     <div className="detail-context">
                         <ReactMarkdown
-                            source={markdown}
+                            source={articleData.content}
                             escapeHtml={false}
                         />
                     </div>
@@ -74,7 +42,7 @@ const Detail = ()=> {
                     <Affix>
                         <MarkNav
                             className="article-nav"
-                            source={markdown}
+                            source={articleData.content}
                             ordered={false}
                         />
                     </Affix>
@@ -84,4 +52,15 @@ const Detail = ()=> {
         </div>
     )
 }
+
+Detail.getInitialProps = async (context) => {
+    let id = context.query.id
+    let res = await getArticleById({id})
+    let result = {}
+    if (res.status == 200) {
+        result = res.data;
+    }
+    return result;
+}
+
 export default Detail

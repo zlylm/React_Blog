@@ -1,11 +1,12 @@
 import React,{useState} from 'react'
+import Link from 'next/link'
 import {Row,Col,List,Icon} from 'antd'
 import Head from 'next/head'
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
-import {test} from '../api/index'
+import {getArticleList} from '../api/index'
 import '../public/less/pages/index.less'
 
 const Home = (props) => {
@@ -25,13 +26,15 @@ const Home = (props) => {
             dataSource={articleList}
             renderItem={item=>(
               <List.Item className="article-list">
-                <div className="list-title">{item.title}</div>
+                <Link href={{pathname:'/detail',query:{id:item.id}}}>
+                  <a className="list-title">{item.title}</a>
+                </Link>
                 <div className="list-icon">
-                  <span><Icon type="calendar" /> 2019-06-28</span>
-                  <span><Icon type="folder" /> 视频教程</span>
-                  <span><Icon type="fire" /> 5498人</span>
+                  <span><Icon type="calendar" /> {item.createTime}</span>
+                  <span><Icon type="folder" /> {item.typeName}</span>
+                  <span><Icon type="fire" /> {item.viewCount}人</span>
                 </div>
-                <div className="list-context">{item.context}</div>
+                <div className="list-context">{item.introduce}</div>
               </List.Item>
             )}
           >
@@ -49,7 +52,7 @@ const Home = (props) => {
 }
 
 Home.getInitialProps = async ()=>{
-  let res = await test({},'get')
+  let res = await getArticleList({},'get')
   let result = []
   if (res.status == 200) {
     result = res.data

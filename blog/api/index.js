@@ -32,5 +32,7 @@ const myHttp = ( [url, data={}, method='post'] = [...config] ) => {
         })
 }
 
-// 测试方法
-export const test =(...param) => { return myHttp(['/default/getArticleList',...param]) }
+// 文章列表
+export const getArticleList =(...param) => { return myHttp(['/default/getArticleList',...param]) }
+// 文章详情
+export const getArticleById = (...param) => { return myHttp(['/default/getArticleById',...param]) }
