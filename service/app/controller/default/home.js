@@ -43,6 +43,33 @@ class HomeController extends Controller {
             data: result[0]
         }
     }
+
+    // 获取文章分类标签
+    async getTypeNameList(){
+        const {ctx,app} = this;
+        let result = await app.mysql.select('blog_article_type')
+        ctx.body = {
+            data: result
+        }
+    }
+
+    // 根据分类获取相应的文章列表
+    async getArticleByTypeId(){
+        const {ctx,app} = this;
+        let id = ctx.request.body.id;
+        let sql = 'SELECT article.id as id,' + 
+                  'article.title as title,' +
+                  'article.introduce as introduce,' +
+                  'article.create_time as createTime,' +
+                  'article.view_count as viewCount,' +
+                  'article_type.type_name as typeName'+
+                  ' FROM blog_article AS article LEFT JOIN blog_article_type AS article_type ON article.type_id = article_type.Id' + 
+                  ' WHERE article.type_id ='+id;
+        let result = await app.mysql.query(sql)
+        ctx.body = {
+            data: result
+        }
+    }
 }
 
 module.exports = HomeController

@@ -1,17 +1,17 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {Row,Col,List,Icon,Breadcrumb} from 'antd'
 import Head from 'next/head'
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
+import {getArticleByTypeId} from '../api/index'
 
-const ArtList = () => {
-  const [articleList,setArticleList] = useState([
-    {title:'create-react-app项目暴露webpack配置文件',context:'create-react-app创建的react项目，webapck配置，默认情况下是在node_modules里面的，我们需要把它暴露到根目录上来。 执行 npm run eject 命令即可，一般情况下，是会报错的。 解决方法，依次执行下面几个命令就可以了。'},
-    {title:'create-react-app项目暴露webpack配置文件',context:'create-react-app创建的react项目，webapck配置，默认情况下是在node_modules里面的，我们需要把它暴露到根目录上来。 执行 npm run eject 命令即可，一般情况下，是会报错的。 解决方法，依次执行下面几个命令就可以了。'},
-    {title:'create-react-app项目暴露webpack配置文件',context:'create-react-app创建的react项目，webapck配置，默认情况下是在node_modules里面的，我们需要把它暴露到根目录上来。 执行 npm run eject 命令即可，一般情况下，是会报错的。 解决方法，依次执行下面几个命令就可以了。'}
-  ])
+const ArtList = (props) => {
+  const [articleList,setArticleList] = useState(props.data || [])
+  useEffect(()=>{
+    setArticleList(props.data)
+   })
   return (
     <div>
       <Head>
@@ -33,11 +33,11 @@ const ArtList = () => {
               <List.Item className="article-list">
                 <div className="list-title">{item.title}</div>
                 <div className="list-icon">
-                  <span><Icon type="calendar" /> 2019-06-28</span>
-                  <span><Icon type="folder" /> 视频教程</span>
-                  <span><Icon type="fire" /> 5498人</span>
+                  <span><Icon type="calendar" /> {item.createTime}</span>
+                  <span><Icon type="folder" /> {item.typeName}</span>
+                  <span><Icon type="fire" /> {item.viewCount}人</span>
                 </div>
-                <div className="list-context">{item.context}</div>
+                <div className="list-context">{item.introduce}</div>
               </List.Item>
             )}
           >
@@ -52,6 +52,16 @@ const ArtList = () => {
       <Footer />
     </div>
   )
+}
+
+ArtList.getInitialProps = async (ctx)=>{
+  let id = ctx.query.typeId
+  let res = await getArticleByTypeId({id})
+  let result = []
+  if (res.status == 200) {
+    result = res.data
+  }
+  return result
 }
 
 export default ArtList

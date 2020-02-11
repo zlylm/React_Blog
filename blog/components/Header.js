@@ -1,6 +1,28 @@
+import React,{useEffect,useState} from 'react'
 import {Row,Col,Menu,Icon} from 'antd'
+import Router from 'next/router'
+import {getTypeNameList} from '../api/index'
 import '../public/less/components/header.less'
 const Header = () => {
+    const [navList,setNavList] = useState([])
+    useEffect(()=>{
+        const getList = async ()=> {
+            let res = await getTypeNameList({},'get')
+            let data = res.data.data
+            if (data) {
+                setNavList(data)
+            }
+        }
+        getList()
+        
+    },[])
+    const changeMneu = (e)=> {
+        if (e.key == 0) {
+            Router.push('/')
+        } else {
+            Router.push(`/list?typeId=${e.key}`)
+        }
+    }
     return (
         <>
             <Row type="flex" align="middle" justify="center" className="header">
@@ -9,19 +31,21 @@ const Header = () => {
                     <span className="header-dec">天苍苍，野茫茫</span>
                 </Col>
                 <Col sm={10} xs={0}>
-                    <Menu  mode="horizontal">
-                        <Menu.Item key="home">
+                    <Menu  mode="horizontal" onClick={changeMneu}>
+                        <Menu.Item key="0">
                             <Icon type="home" />
                             首页
                         </Menu.Item>
-                        <Menu.Item key="video">
-                            <Icon type="youtube" />
-                            视频
-                        </Menu.Item>
-                        <Menu.Item key="life">
-                            <Icon type="smile" />
-                            生活
-                        </Menu.Item>
+                        {
+                            navList.map(item=>{
+                                return (
+                                    <Menu.Item key={item.Id}>
+                                        <Icon type="youtube" />
+                                        {item.type_name}
+                                    </Menu.Item>
+                                )
+                            })
+                        }
                     </Menu>
                 </Col>
             </Row>

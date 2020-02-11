@@ -36,3 +36,7 @@ const myHttp = ( [url, data={}, method='post'] = [...config] ) => {
 export const getArticleList =(...param) => { return myHttp(['/default/getArticleList',...param]) }
 // 文章详情
 export const getArticleById = (...param) => { return myHttp(['/default/getArticleById',...param]) }
+// 获取文章分类标签
+export const getTypeNameList = (...param) => { return myHttp(['/default/getTypeNameList',...param]) }
+// 根据文章分类获取相应的文章列表
+export const getArticleByTypeId = (...param) => { return myHttp(['/default/getArticleByTypeId',...param]) }
